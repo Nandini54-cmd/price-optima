@@ -1,0 +1,160 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "provenance": [],
+      "authorship_tag": "ABX9TyMlud7zTumFGjSoio1fhxLg",
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/Nandini54-cmd/price-optima/blob/main/kip%20\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 10,
+      "metadata": {
+        "id": "CGJqR7CDhjx0",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "outputId": "8670d058-ce24-4327-d828-c96ce0e76c58"
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "===== KPI SUMMARY =====\n",
+            "Total_Revenue: 22,514,545.02\n",
+            "Total_Profit: 6,754,363.51\n",
+            "Average_Revenue_per_Ride: 372.50\n",
+            "Average_Utilization_Ratio: 3.24\n",
+            "\n",
+            "===== KPI Dataset (first 10 rows) =====\n",
+            "   Number_of_Riders  Number_of_Drivers Location_Category  \\\n",
+            "0                90                 45             Urban   \n",
+            "1                58                 39          Suburban   \n",
+            "2                42                 31             Rural   \n",
+            "3                89                 28             Rural   \n",
+            "4                78                 22             Rural   \n",
+            "5                59                 35             Urban   \n",
+            "6                93                 43          Suburban   \n",
+            "7                62                 39             Rural   \n",
+            "8                79                 14             Rural   \n",
+            "9                42                  6             Rural   \n",
+            "\n",
+            "  Customer_Loyalty_Status  Number_of_Past_Rides  Average_Ratings  \\\n",
+            "0                  Silver                    13             4.47   \n",
+            "1                  Silver                    72             4.06   \n",
+            "2                  Silver                     0             3.99   \n",
+            "3                 Regular                    67             4.31   \n",
+            "4                 Regular                    74             3.77   \n",
+            "5                  Silver                    83             3.51   \n",
+            "6                 Regular                    44             4.41   \n",
+            "7                    Gold                    83             3.59   \n",
+            "8                  Silver                    71             3.74   \n",
+            "9                  Silver                    21             3.85   \n",
+            "\n",
+            "  Time_of_Booking Vehicle_Type  Expected_Ride_Duration  \\\n",
+            "0           Night      Premium                      90   \n",
+            "1         Evening      Economy                      43   \n",
+            "2       Afternoon      Premium                      76   \n",
+            "3       Afternoon      Premium                     134   \n",
+            "4       Afternoon      Economy                     149   \n",
+            "5           Night      Economy                     128   \n",
+            "6       Afternoon      Premium                      16   \n",
+            "7       Afternoon      Premium                      47   \n",
+            "8         Evening      Economy                     128   \n",
+            "9           Night      Premium                     128   \n",
+            "\n",
+            "   Historical_Cost_of_Ride       Revenue        Profit  Revenue_per_Ride  \\\n",
+            "0               284.257273  25583.154572   7674.946372        284.257273   \n",
+            "1               173.874753  10084.735659   3025.420698        173.874753   \n",
+            "2               329.795469  13851.409696   4155.422909        329.795469   \n",
+            "3               470.201232  41847.909626  12554.372888        470.201232   \n",
+            "4               579.681422  45215.150944  13564.545283        579.681422   \n",
+            "5               339.955361  20057.366276   6017.209883        339.955361   \n",
+            "6               104.061541   9677.723338   2903.317002        104.061541   \n",
+            "7               235.811864  14620.335540   4386.100662        235.811864   \n",
+            "8               501.412517  39611.588881  11883.476664        501.412517   \n",
+            "9               398.993365  16757.721312   5027.316394        398.993365   \n",
+            "\n",
+            "   Utilization_Ratio  \n",
+            "0           2.000000  \n",
+            "1           1.487179  \n",
+            "2           1.354839  \n",
+            "3           3.178571  \n",
+            "4           3.545455  \n",
+            "5           1.685714  \n",
+            "6           2.162791  \n",
+            "7           1.589744  \n",
+            "8           5.642857  \n",
+            "9           7.000000  \n"
+          ]
+        }
+      ],
+      "source": [
+        "import pandas as pd\n",
+        "\n",
+        "# Load dataset\n",
+        "# Replace '/path/to/your/dynamic_pricing.csv' with the actual path to your file\n",
+        "file_path = \"/content/dynamic_pricing.csv.csv\"   # Use the correct file name\n",
+        "df = pd.read_csv(file_path)\n",
+        "\n",
+        "# Copy dataframe for KPI calculations\n",
+        "kpi_df = df.copy()\n",
+        "\n",
+        "# -----------------------\n",
+        "# KPI IMPLEMENTATION\n",
+        "# -----------------------\n",
+        "\n",
+        "# 1. Revenue (₹)\n",
+        "kpi_df[\"Revenue\"] = kpi_df[\"Historical_Cost_of_Ride\"] * kpi_df[\"Number_of_Riders\"]\n",
+        "\n",
+        "# 2. Profit (₹) assuming cost = 70% of price\n",
+        "kpi_df[\"Profit\"] = (kpi_df[\"Historical_Cost_of_Ride\"] * 0.30) * kpi_df[\"Number_of_Riders\"]\n",
+        "\n",
+        "# 3. Revenue per Ride (₹)\n",
+        "kpi_df[\"Revenue_per_Ride\"] = kpi_df[\"Revenue\"] / kpi_df[\"Number_of_Riders\"]\n",
+        "\n",
+        "# 4. Utilization Ratio\n",
+        "kpi_df[\"Utilization_Ratio\"] = kpi_df[\"Number_of_Riders\"] / kpi_df[\"Number_of_Drivers\"]\n",
+        "\n",
+        "# -----------------------\n",
+        "# KPI SUMMARY (overall)\n",
+        "# -----------------------\n",
+        "summary = {\n",
+        "    \"Total_Revenue\": kpi_df[\"Revenue\"].sum(),\n",
+        "    \"Total_Profit\": kpi_df[\"Profit\"].sum(),\n",
+        "    \"Average_Revenue_per_Ride\": kpi_df[\"Revenue_per_Ride\"].mean(),\n",
+        "    \"Average_Utilization_Ratio\": kpi_df[\"Utilization_Ratio\"].mean()\n",
+        "}\n",
+        "\n",
+        "# Print results\n",
+        "print(\"===== KPI SUMMARY =====\")\n",
+        "for k, v in summary.items():\n",
+        "    print(f\"{k}: {v:,.2f}\")\n",
+        "\n",
+        "print(\"\\n===== KPI Dataset (first 10 rows) =====\")\n",
+        "print(kpi_df.head(10))"
+      ]
+    }
+  ]
+}
